@@ -303,7 +303,7 @@ int smu_resolve_cpu_class(void) {
                     g_smu.codename = CODENAME_CEZANNE;
                     break;
                 case 0x61:
-                    g_smu.codename = CODENAME_RAPHAEL;
+                    g_smu.codename = (pkg_type == 1 ? CODENAME_DRAGONRANGE : CODENAME_RAPHAEL);
                     break;
                 case 0x74:
                     g_smu.codename = CODENAME_PHOENIX;
@@ -356,6 +356,7 @@ static int detect_rsmu_address(void) {
         case CODENAME_MILAN:
         case CODENAME_CHAGALL:
         case CODENAME_RAPHAEL:
+        case CODENAME_DRAGONRANGE:
         case CODENAME_GRANITERIDGE:
         case CODENAME_STORMPEAK: {
             g_smu.addr_rsmu_mb_cmd  = 0x3B10524;
@@ -411,6 +412,7 @@ static int detect_hsmp_address(void) {
         case CODENAME_MILAN:
         case CODENAME_CHAGALL:
         case CODENAME_RAPHAEL:
+        case CODENAME_DRAGONRANGE:
         case CODENAME_GRANITERIDGE:
         case CODENAME_STORMPEAK: {
             g_smu.addr_hsmp_mb_cmd = 0x3B10534;
@@ -475,6 +477,7 @@ static int detect_mp1_address(void) {
         case CODENAME_MILAN:
         case CODENAME_CHAGALL:
         case CODENAME_RAPHAEL:
+        case CODENAME_DRAGONRANGE:
         case CODENAME_GRANITERIDGE:
         case CODENAME_STORMPEAK: {
             g_smu.mp1_if_ver        = IF_VERSION_11;
@@ -668,6 +671,7 @@ u64 smu_get_dram_base_address(const struct pci_dev* dev) {
         case CODENAME_RAPHAEL:
         case CODENAME_GRANITERIDGE:
         case CODENAME_STORMPEAK:
+        case CODENAME_DRAGONRANGE:
             return smu_get_dram_base_address_class_1(dev, 0x04);
         case CODENAME_RENOIR:
         case CODENAME_LUCIENNE:
@@ -723,6 +727,7 @@ smu_return_val smu_transfer_table_to_dram(const struct pci_dev* dev) {
             fn = 0x05;
             break;
         case CODENAME_RAPHAEL:
+        case CODENAME_DRAGONRANGE:
         case CODENAME_GRANITERIDGE:
         case CODENAME_STORMPEAK:
             fn = 0x03;
@@ -824,6 +829,7 @@ smu_return_val smu_get_pm_table_version(const struct pci_dev* dev, u32* version)
             fn = 0x08;
             break;
         case CODENAME_RAPHAEL:
+        case CODENAME_DRAGONRANGE:
         case CODENAME_GRANITERIDGE:
         case CODENAME_STORMPEAK:
             fn = 0x05;
@@ -935,6 +941,7 @@ u32 smu_update_pmtable_size(const u32 version) {
             g_smu.pm_dram_base &= 0xFFFFFFFF;
         }
             break;
+        case CODENAME_DRAGONRANGE:
         case CODENAME_RAPHAEL: {
             switch (version) {
                 case 0x540000: g_smu.pm_dram_map_size = 0x828; break;
@@ -1058,6 +1065,7 @@ smu_return_val smu_read_pm_table(const struct pci_dev* dev, unsigned char* dst, 
         if (g_smu.codename == CODENAME_VERMEER ||
             g_smu.codename == CODENAME_MATISSE ||
             g_smu.codename == CODENAME_RAPHAEL ||
+            g_smu.codename == CODENAME_DRAGONRANGE ||
             g_smu.codename == CODENAME_GRANITERIDGE ||
             g_smu.codename == CODENAME_RENOIR ||
             g_smu.codename == CODENAME_LUCIENNE ||
